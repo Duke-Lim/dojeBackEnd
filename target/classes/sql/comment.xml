@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.ac.yyhighschool.service.CommentService">
+	<select id="commentList" resultType="kr.ac.yyhighschool.vo.CommentVO">
+		SELECT COM_ID, USER_NICKNAME, POST_ID, COM_CONTENT, COM_CREATED, GROUP_ID, LEVEL, COM_SEQ 
+		FROM BOARD_COMMENT JOIN USER
+		ON BOARD_COMMENT.USER_ID = USER.USER_ID
+		WHERE POST_ID = #{POST_ID}
+		ORDER BY GROUP_ID, COM_SEQ DESC;
+	</select>
+	
+	<insert id="writeComment" parameterType="hashmap">
+		INSERT INTO BOARD_COMMENT (USER_ID, POST_ID, COM_CONTENT, COM_CREATED, GROUP_ID, LEVEL, COM_SEQ)
+		VALUES(#{USER_ID}, #{POST_ID}, #{COM_CONTENT}, now(), #{GROUP_ID}, #{LEVEL}, #{COM_SEQ});
+	</insert>
+	
+	<update id="modifyComment" parameterType="kr.ac.yyhighschool.vo.CommentVO">
+		UPDATE BOARD_COMMENT
+		SET COM_CONTENT = #{COM_CONTENT}
+		WHERE COM_ID = #{COM_ID};
+	</update>
+	
+</mapper>
