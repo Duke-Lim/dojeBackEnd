@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.ac.yyhighschool.service.FileService">
+	<insert id="fileSave" parameterType="hashmap">
+		INSERT INTO BOARD_FILE (POST_ID, USER_ID, FILE_NAME, FAKE_FILE_NAME, FILE_SIZE)
+		VALUES (#{POST_ID}, #{USER_ID}, #{FILE_NAME}, #{FAKE_FILE_NAME}, #{FILE_SIZE});
+	</insert>
+	<select id="fileList" resultType="kr.ac.yyhighschool.vo.FileVO">
+		SELECT *
+		FROM BOARD_FILE
+	</select>
+</mapper>

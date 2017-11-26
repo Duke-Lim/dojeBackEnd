@@ -20,5 +20,4 @@
 		SET COM_CONTENT = #{COM_CONTENT}
 		WHERE COM_ID = #{COM_ID};
 	</update>
-	
 </mapper>

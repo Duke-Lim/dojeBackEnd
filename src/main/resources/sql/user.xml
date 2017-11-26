@@ -13,6 +13,12 @@
 		WHERE USER_ID = #{USER_ID};
 	</select>
 	
+	<update id="modifyUser" parameterType="hashmap">
+		UPDATE USER
+		SET USER_ID = #{USER_ID}, USER_PW = #{USER_PW}
+		WHERE USER_ID = #{USER_ID};
+	</update>
+	
 	<insert id="joinUser" parameterType="hashmap">
 		INSERT INTO USER (USER_ID, USER_PW, USER_NICKNAME, USER_AUTHORITY)
 		VALUES (#{USER_ID}, #{USER_PW}, #{USER_NICKNAME}, #{USER_AUTHORITY});

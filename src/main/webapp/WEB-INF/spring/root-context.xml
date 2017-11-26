@@ -22,4 +22,17 @@
 	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
 	</bean>	
+	
+	<!-- 파일업로드를 위한 설정 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="UTF-8"></property>
+        <property name="maxUploadSize" value="100000000"/>
+        <property name="maxInMemorySize" value="100000000"/>
+    </bean>
+    
+    <bean id="fileDownloadView" class="kr.ac.yyhighschool.util.FileDownload"></bean>
+    
+    <bean id="fileViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
+    		<property name="order" value="0"></property>
+    </bean>
 </beans>

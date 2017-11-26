@@ -31,4 +31,9 @@ public class UserServiceImpl implements UserService {
 		return userDAO.joinUser(reqMap);
 	}
 
+	@Override
+	public int modifyUser(HashMap<String, Object> reqMap) {
+		return userDAO.modifyUser(reqMap);
+	}
+
 }

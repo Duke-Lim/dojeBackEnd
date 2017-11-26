@@ -24,7 +24,7 @@
 	</table>
 	
 	<h1>글 찾기</h1>
-	<form action="/test/post" method="POST">
+	<form action="/test/post.do" method="GET">
 		<input type="text" name="id"/>
 		<button type="submit">전송</button>
 	</form>
@@ -37,6 +37,15 @@
 		그룹 아이디 : <input type="text" name="GROUP_ID"/><br>
 		레벨 : <input type="text" name="LEVEL"/><br>
 		시퀀스 : <input type="text" name="POST_SEQ"/><br>
+		<button type="submit">전송</button>
+	</form>
+	
+	<h1>파일 업로드</h1>
+	<form action="/test/fileupload.do" method="POST" enctype="multipart/form-data">
+		아이디 : <input type="text" name="user_id"/>
+		글아이디 : <input type="text" name="post_id"/>
+		파일 : <input type="file" name="file"/>
+		파일 : <input type="file" name="file1"/>
 		<button type="submit">전송</button>
 	</form>
 </body>

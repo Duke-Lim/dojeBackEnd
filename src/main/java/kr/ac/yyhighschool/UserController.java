@@ -68,4 +68,25 @@ public class UserController {
 		return success;
 	}
 	
+	@RequestMapping(value = "/modifyuser.json", produces = "application/json", method = RequestMethod.POST)
+	public @ResponseBody HashMap<String, String> modifyuser(@RequestParam HashMap<String, Object> reqMap) {
+		HashMap<String, String> success = new HashMap<String, String>();
+		
+		logger.info(reqMap.toString());
+		
+		try {
+			userDAO.modifyUser(reqMap);
+			
+			success.put("CODE", "00");
+			success.put("MESSAGE", "SUCCESS");
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			success.put("CODE", "01");
+			success.put("MESSAGE", "ERROR");
+		}
+		
+		return success;
+	}
+	
 }

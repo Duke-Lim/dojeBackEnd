@@ -1,5 +1,7 @@
 package kr.ac.yyhighschool;
 
+import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,11 +14,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.ModelAndView;
 
 import kr.ac.yyhighschool.dao.CommentDAO;
+import kr.ac.yyhighschool.dao.FileDAO;
 import kr.ac.yyhighschool.dao.PostDAO;
 import kr.ac.yyhighschool.dao.UserDAO;
+import kr.ac.yyhighschool.util.FileUpload;
 import kr.ac.yyhighschool.vo.CommentVO;
+import kr.ac.yyhighschool.vo.FileVO;
 import kr.ac.yyhighschool.vo.PostVO;
 import kr.ac.yyhighschool.vo.UserVO;
 
@@ -33,9 +40,12 @@ public class TestController {
 	@Autowired
 	private CommentDAO commentDAO;
 	
+	@Autowired
+	private FileDAO fileDAO;
+	
 	private static final Logger logger = LoggerFactory.getLogger(TestController.class);
 	
-	@RequestMapping(value = "/post", method = RequestMethod.GET)
+	@RequestMapping(value = "/postList.do")
 	public String postList(Model model) {
 		List<PostVO> result = new ArrayList<PostVO>();
 		
@@ -48,7 +58,7 @@ public class TestController {
 		return "home";
 	}
 	
-	@RequestMapping(value = "/post/{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "/post.do")
 	public String post(Model model, @RequestParam int id) {
 		PostVO postVO = new PostVO();
 		List<PostVO> result = new ArrayList<PostVO>();
@@ -65,6 +75,7 @@ public class TestController {
 	
 	@RequestMapping(value = "/writePost.do")
 	public String writePost(Model model, @RequestParam HashMap<String, Object> reqMap) {	
+		
 		logger.info(reqMap.toString());
 				
 		postDAO.writePost(reqMap);
@@ -129,5 +140,40 @@ public class TestController {
 		commentDAO.modifyComment(reqMap);
 		
 		return "redirect:commentList.do";
+	}
+	
+	@RequestMapping(value = "/allfile.do")
+	public String allfile(Model model) {
+		List<FileVO> list = new ArrayList<FileVO>();
+		
+		list = fileDAO.fileList();
+		
+		model.addAttribute("result", list);
+		
+		return "file";
+	}
+	
+	@RequestMapping(value = "/fileupload.do", method = RequestMethod.POST)
+	public String fileupload(MultipartHttpServletRequest request, Model model) {
+		FileUpload fileUtil = new FileUpload();
+		
+		List<HashMap<String, Object>> list = fileUtil.fileSave(request);
+		
+		for (HashMap<String, Object> hashMap : list) {
+			fileDAO.fileSave(hashMap);
+		}
+		
+		model.addAttribute("result", list);
+		
+		return "file";
+	}
+	
+	@RequestMapping(value = "/filedownload.do")
+	public ModelAndView filedownload(@RequestParam String filename) {
+		
+		File downloadFile = new File(FileUpload.filePath + filename);
+		
+		
+		return new ModelAndView("fileDownloadView", "downloadFile", downloadFile);
 	}
 }

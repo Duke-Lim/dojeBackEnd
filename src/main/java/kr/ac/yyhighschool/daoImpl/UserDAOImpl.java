@@ -31,4 +31,9 @@ public class UserDAOImpl implements UserDAO {
 		return sqlSession.insert("joinUser", reqMap);
 	}
 
+	@Override
+	public int modifyUser(HashMap<String, Object> reqMap) {
+		return sqlSession.update("modifyUser", reqMap);
+	}
+
 }
