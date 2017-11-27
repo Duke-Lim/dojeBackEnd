@@ -1,7 +1,8 @@
 # mac
 .DS_Store
 
-# 
+# 파일
+FileStoage/
 
 # Compiled class file
 *.class
