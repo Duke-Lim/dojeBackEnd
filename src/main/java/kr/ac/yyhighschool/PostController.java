@@ -25,8 +25,8 @@ public class PostController {
 
 	private static final Logger logger = LoggerFactory.getLogger(PostController.class);
 
-	@RequestMapping(value = "/postlist.json", produces = "application/json", method = RequestMethod.POST)
-	public @ResponseBody List<PostVO> postList(@RequestParam List<PostVO> reqList) {
+	@RequestMapping(value = "/postlist.json", produces = "application/json")
+	public @ResponseBody List<PostVO> postList() {
 		List<PostVO> result = new ArrayList<PostVO>();
 
 		result = postDAO.getPostList();

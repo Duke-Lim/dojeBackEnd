@@ -1,10 +1,10 @@
 package kr.ac.yyhighschool;
 
-import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,13 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.servlet.ModelAndView;
 
 import kr.ac.yyhighschool.dao.CommentDAO;
 import kr.ac.yyhighschool.dao.FileDAO;
 import kr.ac.yyhighschool.dao.PostDAO;
 import kr.ac.yyhighschool.dao.UserDAO;
-import kr.ac.yyhighschool.util.FileUpload;
+import kr.ac.yyhighschool.util.FileUtil;
 import kr.ac.yyhighschool.vo.CommentVO;
 import kr.ac.yyhighschool.vo.FileVO;
 import kr.ac.yyhighschool.vo.PostVO;
@@ -141,27 +140,12 @@ public class TestController {
 		
 		return "redirect:commentList.do";
 	}
-	
-	@RequestMapping(value = "/allfile.do")
-	public String allfile(Model model) {
-		List<FileVO> list = new ArrayList<FileVO>();
-		
-		list = fileDAO.fileList();
-		
-		model.addAttribute("result", list);
-		
-		return "file";
-	}
-	
+
 	@RequestMapping(value = "/fileupload.do", method = RequestMethod.POST)
 	public String fileupload(MultipartHttpServletRequest request, Model model) {
-		FileUpload fileUtil = new FileUpload();
+		FileUtil fileUtil = new FileUtil();
 		
 		List<HashMap<String, Object>> list = fileUtil.fileSave(request);
-		
-		for (HashMap<String, Object> hashMap : list) {
-			fileDAO.fileSave(hashMap);
-		}
 		
 		model.addAttribute("result", list);
 		
@@ -169,11 +153,18 @@ public class TestController {
 	}
 	
 	@RequestMapping(value = "/filedownload.do")
-	public ModelAndView filedownload(@RequestParam String filename) {
+	public void filedownload(@RequestParam String name, HttpServletResponse response) {
+		FileUtil fileUtil = new FileUtil();
 		
-		File downloadFile = new File(FileUpload.filePath + filename);
+		fileUtil.fileDownload(name, response);
+	}
+	
+	@RequestMapping(value = "/fileList.do")
+	public String allFile(@RequestParam int post_id, Model model) {
+		List<FileVO> list = fileDAO.fileList(post_id);
+
+		model.addAttribute("result", list);
 		
-		
-		return new ModelAndView("fileDownloadView", "downloadFile", downloadFile);
+		return "file";
 	}
 }

@@ -22,8 +22,13 @@ public class FileDAOImpl implements FileDAO {
 	}
 
 	@Override
-	public List<FileVO> fileList() {
-		return sqlSession.selectList("fileList");
+	public List<FileVO> fileList(int post_id) {
+		return sqlSession.selectList("fileList", post_id);
+	}
+
+	@Override
+	public FileVO getFile(String name) {
+		return sqlSession.selectOne("getFile", name);
 	}
 
 }

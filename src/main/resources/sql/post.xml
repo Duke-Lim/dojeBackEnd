@@ -24,7 +24,7 @@
 	<update id="seqCount" parameterType="hashmap">
 		UPDATE BOARD_POST
 		SET POST_SEQ = POST_SEQ + 1
-		WHERE GROUP_ID = #{GROUP_ID} AND POST_SEQ != #{POST_SEQ};
+		WHERE GROUP_ID = #{GROUP_ID} AND POST_SEQ > #{POST_SEQ};
 	</update>
 	
 	<update id="modifyPost" parameterType="kr.ac.yyhighschool.vo.PostVO">

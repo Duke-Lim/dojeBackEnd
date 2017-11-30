@@ -45,7 +45,12 @@
 		아이디 : <input type="text" name="user_id"/>
 		글아이디 : <input type="text" name="post_id"/>
 		파일 : <input type="file" name="file"/>
-		파일 : <input type="file" name="file1"/>
+		<button type="submit">전송</button>
+	</form>
+	
+	<h1>파일보기</h1>
+	<form action="/test/fileList.do">
+		글 아이디 : <input type="text" name="post_id"/>
 		<button type="submit">전송</button>
 	</form>
 </body>

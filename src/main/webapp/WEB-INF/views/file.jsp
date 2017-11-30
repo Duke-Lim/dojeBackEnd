@@ -10,9 +10,7 @@
 <body>
 	<c:forEach items="${result}" var="file">
 		<br>${file.toString()}
-		<img src="/FileStorage/${file.fake_file_name}" width="500" height="500">
+		<img src="/img/${file.fake_file_name}">
 	</c:forEach>
-	
-	
 </body>
 </html>

@@ -22,8 +22,13 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public List<FileVO> fileList() {
-		return fileDAO.fileList();
+	public List<FileVO> fileList(int post_id) {
+		return fileDAO.fileList(post_id);
+	}
+
+	@Override
+	public FileVO getFile(String name) {
+		return fileDAO.getFile(name);
 	}
 
 }

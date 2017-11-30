@@ -6,8 +6,15 @@
 		INSERT INTO BOARD_FILE (POST_ID, USER_ID, FILE_NAME, FAKE_FILE_NAME, FILE_SIZE)
 		VALUES (#{POST_ID}, #{USER_ID}, #{FILE_NAME}, #{FAKE_FILE_NAME}, #{FILE_SIZE});
 	</insert>
-	<select id="fileList" resultType="kr.ac.yyhighschool.vo.FileVO">
+	<select id="fileList" resultType="kr.ac.yyhighschool.vo.FileVO" parameterType="java.lang.Integer">
 		SELECT *
 		FROM BOARD_FILE
+		WHERE POST_ID = #{POST_ID}
+	</select>
+	
+	<select id="getFile" resultType="kr.ac.yyhighschool.vo.FileVO" parameterType="java.lang.String">
+		SELECT *
+		FROM BOARD_FILE
+		WHERE FAKE_FILE_NAME = #{FAKE_FILE_NAME};
 	</select>
 </mapper>
