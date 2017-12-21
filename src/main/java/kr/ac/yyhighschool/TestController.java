@@ -4,19 +4,28 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import kr.ac.yyhighschool.dao.CommentDAO;
+import kr.ac.yyhighschool.dao.FileDAO;
 import kr.ac.yyhighschool.dao.PostDAO;
 import kr.ac.yyhighschool.dao.UserDAO;
+import kr.ac.yyhighschool.util.Utils;
 import kr.ac.yyhighschool.vo.CommentVO;
+import kr.ac.yyhighschool.vo.FileVO;
 import kr.ac.yyhighschool.vo.PostVO;
 import kr.ac.yyhighschool.vo.UserVO;
 
@@ -24,37 +33,37 @@ import kr.ac.yyhighschool.vo.UserVO;
 @RequestMapping("/test")
 public class TestController {
 	
-	@Autowired
+	@Inject
 	private PostDAO postDAO;
 	
-	@Autowired
+	@Inject
 	private UserDAO userDAO;
 	
-	@Autowired
+	@Inject
 	private CommentDAO commentDAO;
 	
-	private static final Logger logger = LoggerFactory.getLogger(TestController.class);
+	@Inject
+	private FileDAO fileDAO;
 	
-	@RequestMapping(value = "/post", method = RequestMethod.GET)
-	public String postList(Model model) {
+	private static final Logger logger = LoggerFactory.getLogger(TestController.class);
+
+	@RequestMapping(value = "/{board_title}/post", method = RequestMethod.GET)
+	public String postList(Model model, @PathVariable("board_title") String board_title) {
 		List<PostVO> result = new ArrayList<PostVO>();
 		
-		result = postDAO.getPostList();
-		
-		logger.info(result.toString());
+		//result = postDAO.getPostList(board_id);
 		
 		model.addAttribute("result", result);
 		
 		return "home";
 	}
 	
-	@RequestMapping(value = "/post/{id}", method = RequestMethod.POST)
-	public String post(Model model, @RequestParam int id) {
+	@RequestMapping(value = "/post/{post_id}", method = RequestMethod.GET)
+	public String post(Model model, @PathVariable int post_id) {
 		PostVO postVO = new PostVO();
 		List<PostVO> result = new ArrayList<PostVO>();
 		
-		postDAO.viewCount(id);
-		postVO = postDAO.getPost(id);
+		postVO = postDAO.getPost(post_id);
 		
 		result.add(postVO);
 		
@@ -63,42 +72,40 @@ public class TestController {
 		return "home";
 	}
 	
-	@RequestMapping(value = "/writePost.do")
+	@RequestMapping(value = "/post", method = RequestMethod.POST)
 	public String writePost(Model model, @RequestParam HashMap<String, Object> reqMap) {	
+		
 		logger.info(reqMap.toString());
 				
 		postDAO.writePost(reqMap);
-		postDAO.seqCount(reqMap);
 		
 		model.addAttribute("result", reqMap);
 		
-		return "redirect:postList.do";
+		return "redirect:/test/post";
 	}
 	
-	@RequestMapping(value = "/modifyPost.do")
+	@RequestMapping(value = "/post", method = RequestMethod.PUT)
 	public String modifyPost(Model model, @RequestParam HashMap<String, Object> reqMap) {
 		postDAO.modifyPost(reqMap);
 		
-		return "redirect:postList.do";
+		return "redirect:/test/post";
 	}
 		
-	@RequestMapping(value = "/userList.do")
+	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	public String userList(Model model) {
 		List<UserVO> result = new ArrayList<UserVO>();
 		
-		result = userDAO.getUserList();
 		
 		model.addAttribute("result", result);
 		
 		return "user";
 	}
 	
-	@RequestMapping(value = "/user.do")
-	public String user(@RequestParam String id, Model model) {
+	@RequestMapping(value = "/user/{user_id}", method = RequestMethod.GET)
+	public String user(@PathVariable int user_id, Model model) {
 		UserVO userVO = new UserVO();
 		List<UserVO> result = new ArrayList<UserVO>();
 		
-		userVO = userDAO.getUser(id);
 		result.add(userVO);
 		
 		model.addAttribute("result", result);
@@ -106,14 +113,15 @@ public class TestController {
 		return "user";
 	}
 	
-	@RequestMapping(value = "/joinUser.do")
+	@RequestMapping(value = "/user", method = RequestMethod.POST)
 	public String joinUser(@RequestParam HashMap<String, Object> reqMap, Model model) {
+		logger.info(reqMap.toString());
 		userDAO.joinUser(reqMap);
 		
-		return "redirect:userList.do";
+		return "redirect:/test/user";
 	}
 	
-	@RequestMapping(value = "/commentList.do")
+	@RequestMapping(value = "/com", method = RequestMethod.GET)
 	public String commentList(@RequestParam int id, Model model) {
 		List<CommentVO> result = new ArrayList<CommentVO>();
 		
@@ -124,10 +132,40 @@ public class TestController {
 		return "comment";
 	}
 	
-	@RequestMapping(value = "/modifyComment.do")
+	@RequestMapping(value = "/com", method = RequestMethod.PUT)
 	public String modifyComment(@RequestParam HashMap<String, Object> reqMap, Model model) {
-		commentDAO.modifyComment(reqMap);
 		
-		return "redirect:commentList.do";
+		return "redirect:/user/com";
+	}
+
+	@RequestMapping(value = "/file", method = RequestMethod.POST)
+	public String fileupload(MultipartHttpServletRequest request, Model model) {
+		Utils fileUtil = new Utils();
+		List<HashMap<String, Object>> list = fileUtil.fileSave(request);
+		
+		for (HashMap<String, Object> hashMap : list) {
+			fileDAO.fileSave(hashMap);
+		}
+		
+		model.addAttribute("result", list);
+		
+		return "file";
+	}
+	
+	@RequestMapping(value = "/file", method = RequestMethod.GET)
+	public void filedownload(@RequestParam int file_id, HttpServletResponse response) {
+		Utils fileUtil = new Utils();
+		FileVO fileVO = fileDAO.getFile(file_id);
+		
+		fileUtil.fileDownload(file_id, fileVO, response);
+	}
+	
+	@RequestMapping(value = "/file/{post_id}", method = RequestMethod.GET)
+	public String allFile(@PathVariable int post_id, Model model) {
+		List<FileVO> list = fileDAO.fileList(post_id);
+
+		model.addAttribute("result", list);
+		
+		return "file";
 	}
 }

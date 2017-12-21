@@ -2,19 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.ac.yyhighschool.service.UserService">
-	<select id="getUserList" resultType="kr.ac.yyhighschool.vo.UserVO">
-		SELECT *
-		FROM USER;
-	</select>
-	
-	<select id="getUser" resultType="kr.ac.yyhighschool.vo.UserVO">
+	<select id="getUser" resultType="kr.ac.yyhighschool.vo.UserVO" parameterType="java.lang.String">
 		SELECT *
 		FROM USER
-		WHERE USER_ID = #{USER_ID};
+		WHERE USER_KEY = #{USER_KEY};
+	</select>
+	
+	<select id="getUserKey" parameterType="hashmap" resultType="java.lang.String">
+		SELECT USER_KEY
+		FROM USER
+		WHERE USER_EMAIL = #{USEREMAIL}, USER_PASSWORD = #{USER_PASSWORD};
 	</select>
 	
 	<insert id="joinUser" parameterType="hashmap">
-		INSERT INTO USER (USER_ID, USER_PW, USER_NICKNAME, USER_AUTHORITY)
-		VALUES (#{USER_ID}, #{USER_PW}, #{USER_NICKNAME}, #{USER_AUTHORITY});
+		INSERT INTO USER (USER_EMAIL, USERNAME, USER_PASSWORD, USER_KEY)
+		VALUES (#{USEREMAIL}, #{USERNAME}, #{USERPASSWORD}, #{USER_KEY});
 	</insert>
 </mapper>

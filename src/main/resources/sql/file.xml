@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.ac.yyhighschool.service.FileService">
+	<insert id="fileSave" parameterType="hashmap">
+		<selectKey resultType="java.lang.Integer" order="BEFORE" keyProperty="POST_ID">
+			SELECT MAX(POST_ID) FROM BOARD_POST;
+		</selectKey>
+		INSERT INTO BOARD_FILE (POST_ID, USER_ID, FILE_NAME, FAKE_FILE_NAME, FILE_SIZE)
+		VALUES (#{POST_ID}, #{USER_ID}, #{FILE_NAME}, #{FAKE_FILE_NAME}, #{FILE_SIZE});
+	</insert>
+	<select id="fileList" resultType="kr.ac.yyhighschool.vo.FileVO" parameterType="java.lang.Integer">
+		SELECT *
+		FROM BOARD_FILE JOIN USER
+		ON BOARD_FILE.USER_ID = USER.USER_ID
+		WHERE POST_ID = #{POST_ID}
+	</select>
+	
+	<select id="getFile" resultType="kr.ac.yyhighschool.vo.FileVO" parameterType="java.lang.Integer">
+		SELECT *
+		FROM BOARD_FILE
+		WHERE FILE_ID = #{FILE_ID}
+	</select>
+</mapper>

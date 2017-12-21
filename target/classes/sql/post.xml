@@ -3,38 +3,29 @@
     
 <mapper namespace="kr.ac.yyhighschool.service.PostService">
 	<select id="getPostList" resultType="kr.ac.yyhighschool.vo.PostVO">
-		SELECT POST_ID, POST_TITLE, POST_CONTENT, POST_CREATED, POST_VIEW, USER_NICKNAME, GROUP_ID, LEVEL, POST_SEQ 
-		FROM BOARD_POST JOIN USER
-		ON BOARD_POST.USER_ID = USER.USER_ID
-		ORDER BY GROUP_ID, POST_SEQ DESC;
+		SELECT ID, TITLE, CONTENT, WRITER, CREATED, UPDATED
+		FROM BOARD;
 	</select>
 	
 	<select id="getPost" resultType="kr.ac.yyhighschool.vo.PostVO" parameterType="java.lang.Integer">
-		SELECT POST_ID, POST_TITLE, POST_CONTENT, POST_CREATED, POST_VIEW, USER_NICKNAME, GROUP_ID, LEVEL, POST_SEQ 
-		FROM BOARD_POST JOIN USER
-		ON BOARD_POST.USER_ID = USER.USER_ID
-		WHERE POST_ID = #{POST_ID};
+		SELECT *
+		FROM BOARD
+		WHERE ID = #{ID};
 	</select>
 	
 	<insert id="writePost" parameterType="hashmap">
-		INSERT INTO BOARD_POST (POST_TITLE, POST_CONTENT, USER_ID, GROUP_ID, LEVEL, POST_SEQ)
-		VALUES(#{POST_TITLE}, #{POST_CONTENT}, #{USER_ID}, #{GROUP_ID}, #{LEVEL}, #{POST_SEQ});
+		INSERT INTO BOARD (TITLE, CONTENT, WRITER)
+		VALUES(#{TITLE}, #{CONTENT}, #{WRITER});
 	</insert>
 	
-	<update id="seqCount" parameterType="hashmap">
-		UPDATE BOARD_POST
-		SET POST_SEQ = POST_SEQ + 1
-		WHERE GROUP_ID = #{GROUP_ID}, LEVEL = #{LEVEL}, POST_SEQ = #{POST_SEQ};
-	</update>
-	
 	<update id="modifyPost" parameterType="kr.ac.yyhighschool.vo.PostVO">
-		UPDATE BOARD_POST
-		SET POST_TITLE = #{POST_TITLE}, POST_CONTENT = #{POST_CONTENT}, POST_MODIFIED = now();
+		UPDATE BOARD
+		SET TITLE = #{TITLE}, CONTENT = #{CONTENT}, POST_UPDATED = now()
+		WHERE ID = #{ID};
 	</update>
 	
-	<update id="viewCount" parameterType="java.lang.Integer">
-		UPDATE BOARD_POST
-		SET POST_VIEW = POST_VIEW + 1
-		WHERE POST_SEQ = #{POST_SEQ};
-	</update>
+	<delete id="deletePost" parameterType="java.lang.Integer">
+		DELETE FROM BOARD
+		WHERE ID = #{ID}
+	</delete>
 </mapper>

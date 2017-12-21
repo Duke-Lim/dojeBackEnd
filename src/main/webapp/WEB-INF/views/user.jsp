@@ -28,11 +28,10 @@
 	</form>
 	
 	<h1>가입</h1>
-	<form action="/test/joinUser.do">
-		아이디 : <input type="text" name="USER_ID"/><br>
+	<form action="/test/user" method="POST">
+		이메일 : <input type="text" name="USER_EMAIL"/><br>
 		비번 : <input type="text" name="USER_PW"/><br>
 		닉네임 :<input type="text" name="USER_NICKNAME"/><br>
-		권한 : <input type="text" name="USER_AUTHORITY"/><br>
 		<button type="submit">전송</button>
 	</form>
 </body>
