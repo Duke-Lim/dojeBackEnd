@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+<<<<<<< HEAD
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+=======
+import javax.servlet.http.HttpServletResponse;
+>>>>>>> 47ecb6a7fbb8fa9dd05c71f03e881aee003435b0
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +27,11 @@ import kr.ac.yyhighschool.dao.CommentDAO;
 import kr.ac.yyhighschool.dao.FileDAO;
 import kr.ac.yyhighschool.dao.PostDAO;
 import kr.ac.yyhighschool.dao.UserDAO;
+<<<<<<< HEAD
 import kr.ac.yyhighschool.util.Utils;
+=======
+import kr.ac.yyhighschool.util.FileUtil;
+>>>>>>> 47ecb6a7fbb8fa9dd05c71f03e881aee003435b0
 import kr.ac.yyhighschool.vo.CommentVO;
 import kr.ac.yyhighschool.vo.FileVO;
 import kr.ac.yyhighschool.vo.PostVO;
@@ -42,6 +50,7 @@ public class TestController {
 	@Inject
 	private CommentDAO commentDAO;
 	
+<<<<<<< HEAD
 	@Inject
 	private FileDAO fileDAO;
 	
@@ -49,6 +58,15 @@ public class TestController {
 
 	@RequestMapping(value = "/{board_title}/post", method = RequestMethod.GET)
 	public String postList(Model model, @PathVariable("board_title") String board_title) {
+=======
+	@Autowired
+	private FileDAO fileDAO;
+	
+	private static final Logger logger = LoggerFactory.getLogger(TestController.class);
+	
+	@RequestMapping(value = "/postList.do")
+	public String postList(Model model) {
+>>>>>>> 47ecb6a7fbb8fa9dd05c71f03e881aee003435b0
 		List<PostVO> result = new ArrayList<PostVO>();
 		
 		//result = postDAO.getPostList(board_id);
@@ -58,8 +76,13 @@ public class TestController {
 		return "home";
 	}
 	
+<<<<<<< HEAD
 	@RequestMapping(value = "/post/{post_id}", method = RequestMethod.GET)
 	public String post(Model model, @PathVariable int post_id) {
+=======
+	@RequestMapping(value = "/post.do")
+	public String post(Model model, @RequestParam int id) {
+>>>>>>> 47ecb6a7fbb8fa9dd05c71f03e881aee003435b0
 		PostVO postVO = new PostVO();
 		List<PostVO> result = new ArrayList<PostVO>();
 		
@@ -162,6 +185,33 @@ public class TestController {
 	
 	@RequestMapping(value = "/file/{post_id}", method = RequestMethod.GET)
 	public String allFile(@PathVariable int post_id, Model model) {
+		List<FileVO> list = fileDAO.fileList(post_id);
+
+		model.addAttribute("result", list);
+		
+		return "file";
+	}
+
+	@RequestMapping(value = "/fileupload.do", method = RequestMethod.POST)
+	public String fileupload(MultipartHttpServletRequest request, Model model) {
+		FileUtil fileUtil = new FileUtil();
+		
+		List<HashMap<String, Object>> list = fileUtil.fileSave(request);
+		
+		model.addAttribute("result", list);
+		
+		return "file";
+	}
+	
+	@RequestMapping(value = "/filedownload.do")
+	public void filedownload(@RequestParam String name, HttpServletResponse response) {
+		FileUtil fileUtil = new FileUtil();
+		
+		fileUtil.fileDownload(name, response);
+	}
+	
+	@RequestMapping(value = "/fileList.do")
+	public String allFile(@RequestParam int post_id, Model model) {
 		List<FileVO> list = fileDAO.fileList(post_id);
 
 		model.addAttribute("result", list);

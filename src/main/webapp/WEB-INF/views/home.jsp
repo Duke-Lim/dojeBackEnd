@@ -23,6 +23,15 @@
 		</c:forEach>
 	</table>
 	
+<<<<<<< HEAD
+=======
+	<h1>글 찾기</h1>
+	<form action="/test/post.do" method="GET">
+		<input type="text" name="id"/>
+		<button type="submit">전송</button>
+	</form>
+	
+>>>>>>> 47ecb6a7fbb8fa9dd05c71f03e881aee003435b0
 	<h1>글 작성</h1>
 	<form action="/test/post" method="POST">
 		제목 : <input type="text" name="POST_TITLE"/><br>
@@ -35,7 +44,11 @@
 	</form>
 	
 	<h1>파일 업로드</h1>
+<<<<<<< HEAD
 	<form action="/test/file" method="POST" enctype="multipart/form-data">
+=======
+	<form action="/test/fileupload.do" method="POST" enctype="multipart/form-data">
+>>>>>>> 47ecb6a7fbb8fa9dd05c71f03e881aee003435b0
 		아이디 : <input type="text" name="user_id"/>
 		글아이디 : <input type="text" name="post_id"/>
 		파일 : <input type="file" name="file"/>
@@ -43,7 +56,11 @@
 	</form>
 	
 	<h1>파일보기</h1>
+<<<<<<< HEAD
 	<form action="/test/file">
+=======
+	<form action="/test/fileList.do">
+>>>>>>> 47ecb6a7fbb8fa9dd05c71f03e881aee003435b0
 		글 아이디 : <input type="text" name="post_id"/>
 		<button type="submit">전송</button>
 	</form>

@@ -12,10 +12,13 @@
 		<br>${file.toString()}
 		<img src="/img/${file.fake_file_name}">
 	</c:forEach>
+<<<<<<< HEAD
 	
 	<br>
 	<form action="/test/file" method="GET">
 		<input type="text" name="file_id"/>
 	</form>
+=======
+>>>>>>> 47ecb6a7fbb8fa9dd05c71f03e881aee003435b0
 </body>
 </html>
